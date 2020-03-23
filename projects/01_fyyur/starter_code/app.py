@@ -4,6 +4,7 @@
 
 
 import json
+import datetime as dt
 import dateutil.parser
 import babel
 from flask import Flask, render_template, request, Response, flash, redirect, url_for
@@ -70,10 +71,10 @@ class Show(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     venue_id = db.Column(db.Integer, db.ForeignKey('venues.id'), nullable=False)
     artist_id = db.Column(db.Integer, db.ForeignKey('artists.id'), nullable=False)
-    start_date = db.Column(db.DateTime, nullable=False)
+    start_time = db.Column(db.DateTime, nullable=False)
 
     def __repr__(self):
-        return f'<Show #{self.id}: artist {self.artist_id} at venue {self.venue_id} on {self.start_date}>'
+        return f'<Show #{self.id}: artist {self.artist_id} at venue {self.venue_id} on {self.start_time}>'
 
 
 # ---------------------------------------------------------------------------- #
@@ -519,6 +520,7 @@ def shows():
         "artist_image_link": "https://images.unsplash.com/photo-1558369981-f9ca78462e61?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=794&q=80",
         "start_time": "2035-04-15T20:00:00.000Z"
     }]
+    # data = Show.query.outerjoin(Artist).outerjoin(Venue)
     return render_template('pages/shows.html', shows=data)
 
 
@@ -536,7 +538,7 @@ def create_show_submission():
     new_show = Show(
         artist_id=request.form['artist_id'],
         venue_id=request.form['venue_id'],
-        start_date=request.form['start_time']
+        start_time=request.form['start_time']
     )
     try:
         db.session.add(new_show)
@@ -579,7 +581,15 @@ if not app.debug:
 # Default port:
 if __name__ == '__main__':
     app.run()
-    # temp = Venue.query.outerjoin(Show).all()
+    # AAA = Venue.query.outerjoin(Show).all()
+    # print(AAA)
+    # for venue_num in AAA:
+    #     print(venue_num)
+    #     venue_num.num_upcoming_shows = 0
+    #     for venue_show in venue_num.shows:
+    #         if venue_show.start_time > dt.datetime.today():
+    #             venue_num.num_upcoming_shows += 1
+    # print(AAA)
     # print()
 
 

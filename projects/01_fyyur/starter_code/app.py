@@ -13,12 +13,13 @@ from flask_migrate import Migrate
 import logging
 from logging import Formatter, FileHandler
 from flask_wtf import Form
-from forms import *
+from forms import VenueForm, ArtistForm, ShowForm
 
 
 # ---------------------------------------------------------------------------- #
 # App Config.
 # ---------------------------------------------------------------------------- #
+
 
 app = Flask(__name__)
 moment = Moment(app)
@@ -42,7 +43,7 @@ class Venue(db.Model):
     phone = db.Column(db.String(120))
     image_link = db.Column(db.String(500))
     facebook_link = db.Column(db.String(120))
-    shows = db.relationship('Show', backref='show', lazy=True)
+    shows = db.relationship('Show', backref='venue_show', lazy=True)
 
     def __repr__(self):
         return f'<Venue #{self.id}: {self.name}>'
@@ -58,7 +59,7 @@ class Artist(db.Model):
     genres = db.Column(db.String(120))
     image_link = db.Column(db.String(500))
     facebook_link = db.Column(db.String(120))
-    shows = db.relationship('Show', backref='show', lazy=True)
+    shows = db.relationship('Show', backref='artist_show', lazy=True)
 
     def __repr__(self):
         return f'<Artist #{self.id}: {self.name}>'
@@ -73,9 +74,6 @@ class Show(db.Model):
 
     def __repr__(self):
         return f'<Show #{self.id}: artist {self.artist_id} at venue {self.venue_id} on {self.start_date}>'
-
-
-# TODO Implement Show and Artist models, and complete all model relationships and properties, as a database migration.
 
 
 # ---------------------------------------------------------------------------- #

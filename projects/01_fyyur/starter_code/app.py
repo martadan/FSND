@@ -256,6 +256,10 @@ def search_artists():
 def show_artist(artist_id):
     # shows the venue page with the given venue_id
     data = Artist.query.get(artist_id)
+    try:
+        data.genres = data.genres.split(',')
+    except:
+        print('Could not split list of genres')
     return render_template('pages/show_artist.html', artist=data)
 
 
@@ -329,14 +333,15 @@ def create_artist_form():
 def create_artist_submission():
     # called upon submitting the new artist listing form
     # TODO fix how 'genres' writes
+    print(request.form['genres'], flush=True)
     new_artist = Artist(
-            name=request.form['name'],
-            city=request.form['city'],
-            state=request.form['state'],
-            phone=request.form['phone'],
-            genres=request.form['genres'],
-            facebook_link=request.form['facebook_link'],
-        )
+        name=request.form['name'],
+        city=request.form['city'],
+        state=request.form['state'],
+        phone=request.form['phone'],
+        genres=request.form['genres'],
+        facebook_link=request.form['facebook_link'],
+    )
     try:
         db.session.add(new_artist)
         db.session.commit()

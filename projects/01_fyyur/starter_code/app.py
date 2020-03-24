@@ -57,9 +57,12 @@ class Artist(db.Model):
     city = db.Column(db.String(120))
     state = db.Column(db.String(120))
     phone = db.Column(db.String(120))
+    website = db.Column(db.String(500))
     genres = db.Column(db.String(120))
     image_link = db.Column(db.String(500))
     facebook_link = db.Column(db.String(120))
+    seeking_venue = db.Column(db.Boolean(), default=False)
+    seeking_description = db.Column(db.String(255))
     shows = db.relationship('Show', backref='artist_show', lazy=True)
 
     def __repr__(self):
@@ -111,6 +114,7 @@ def index():
 @app.route('/venues')
 def venues():
     # TODO: replace with real venues data.
+    # TODO - figure out how to best group by city first
     # num_shows should be aggregated based on number of upcoming shows per venue.
     data = [{
         "city": "San Francisco",
@@ -255,7 +259,11 @@ def show_artist(artist_id):
 
 @app.route('/artists/<int:artist_id>/edit', methods=['GET'])
 def edit_artist(artist_id):
+    # TODO
+    # TODO populate form
+    # TODO add seeking_venue/seeking_description
     form = ArtistForm()
+    # edit_artist = Artist.query.get(artist_id)
     artist = {
         "id": 4,
         "name": "Guns N Petals",

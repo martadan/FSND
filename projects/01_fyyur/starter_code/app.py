@@ -138,23 +138,18 @@ def venues():
 
 @app.route('/venues/search', methods=['POST'])
 def search_venues():
-    # TODO: add num_upcoming_shows
     search_string = request.form.get('search_term', '')
     filtered_query = Venue.query.filter(Venue.name.ilike('%' + search_string + '%'))
     venue_count = filtered_query.count()
     data = filtered_query.all()
+    # adding num_upcoming_shows, even though it looks like form doesn't use it
+    for venue in data:
+        venue.num_upcoming_shows = \
+            Show.query.filter(Show.venue_id == venue.id).filter(Show.start_time > dt.datetime.now()).count()
     response = {
         "count": venue_count,
         "data": data
     }
-    # response = {
-    #     "count": 1,
-    #     "data": [{
-    #         "id": 2,
-    #         "name": "The Dueling Pianos Bar",
-    #         "num_upcoming_shows": 0,
-    #     }]
-    # }
     return render_template('pages/search_venues.html', results=response, search_term=search_string)
 
 

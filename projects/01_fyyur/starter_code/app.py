@@ -113,30 +113,38 @@ def index():
 
 @app.route('/venues')
 def venues():
-    # TODO: replace with real venues data.
-    # TODO - figure out how to best group by city first
-    # num_shows should be aggregated based on number of upcoming shows per venue.
-    data = [{
-        "city": "San Francisco",
-        "state": "CA",
-        "venues": [{
-            "id": 1,
-            "name": "The Musical Hop",
-            "num_upcoming_shows": 0,
-        }, {
-            "id": 3,
-            "name": "Park Square Live Music & Coffee",
-            "num_upcoming_shows": 1,
-        }]
-    }, {
-        "city": "New York",
-        "state": "NY",
-        "venues": [{
-            "id": 2,
-            "name": "The Dueling Pianos Bar",
-            "num_upcoming_shows": 0,
-        }]
-    }]
+    all_venues = Venue.query.all()
+
+    # add num_upcoming_shows
+    for venue in all_venues:
+        venue.num_upcoming_shows = \
+            Show.query.filter(Show.venue_id == venue.id).filter(Show.start_time > dt.datetime.now()).count()
+
+    # re-arrange json to pull out city/state to top level
+    data = []
+    for venue in all_venues:
+        city_found = False
+        for entry in data:
+            if entry['city'] == venue.city and entry['state'] == venue.state:
+                city_found = True
+                # update exisiting record
+                entry['venues'].append({
+                    'id': venue.id,
+                    'name': venue.name,
+                    'num_upcoming_shows': venue.num_upcoming_shows
+                })
+        if not city_found:
+            # add new record
+            data.append({
+                'city': venue.city,
+                'state': venue.state,
+                'venues': [{
+                    'id': venue.id,
+                    'name': venue.name,
+                    'num_upcoming_shows': venue.num_upcoming_shows
+                }]
+            })
+
     return render_template('pages/venues.html', areas=data)
 
 
@@ -276,7 +284,7 @@ def edit_artist(artist_id):
 
 @app.route('/artists/<int:artist_id>/edit', methods=['POST'])
 def edit_artist_submission(artist_id):
-    # TODO figure out how to change genres
+    # Only the first genre comes in through the post request
     artist = Artist.query.get(artist_id)
     artist.name = request.form['name']
     artist.city = request.form['city']
@@ -332,7 +340,7 @@ def create_artist_form():
 @app.route('/artists/create', methods=['POST'])
 def create_artist_submission():
     # called upon submitting the new artist listing form
-    # TODO fix how 'genres' writes
+    # Only the first genre comes through the post request
     print(request.form['genres'], flush=True)
     new_artist = Artist(
         name=request.form['name'],
@@ -428,20 +436,6 @@ if not app.debug:
 # Default port:
 if __name__ == '__main__':
     app.run()
-    # data = Show.query.outerjoin(Artist).outerjoin(Venue)
-    # for show in data:
-    #     print(show.)
-    # print()
-    # AAA = Venue.query.outerjoin(Show).all()
-    # print(AAA)
-    # for venue_num in AAA:
-    #     print(venue_num)
-    #     venue_num.num_upcoming_shows = 0
-    #     for venue_show in venue_num.shows:
-    #         if venue_show.start_time > dt.datetime.today():
-    #             venue_num.num_upcoming_shows += 1
-    # print(AAA)
-    # print()
 
 
 # Or specify port manually:

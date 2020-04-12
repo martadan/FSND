@@ -63,10 +63,28 @@ class TriviaTestCase(unittest.TestCase):
         self.assertEqual(data['success'], True)
         self.assertTrue(data['total_questions'])
         self.assertTrue(len(data['questions']) > 0)
-        self.assertEqual(len(data['questions']), 9)
+        self.assertTrue(len(data['questions']) < 10)
 
     def test_get_paginated_questions_out_of_bounds(self):
         response = self.client().get('/questions', query_string=dict(page=1000))
+        data = json.loads(response.data)
+
+        self.assertEqual(response.status_code, 404)
+        self.assertEqual(data['success'], False)
+
+    def test_delete_question(self):
+        question_id = 2
+        response = self.client().delete(f'/questions/{question_id}')
+        data = json.loads(response.data)
+        question = Question.query.get(question_id)
+
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(data['success'], True)
+        self.assertEqual(question, None)
+
+    def test_delete_question_fail(self):
+        question_id = 1000
+        response = self.client().delete(f'/questions/{question_id}')
         data = json.loads(response.data)
 
         self.assertEqual(response.status_code, 404)

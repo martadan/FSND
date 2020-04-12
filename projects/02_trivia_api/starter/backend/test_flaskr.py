@@ -39,12 +39,38 @@ class TriviaTestCase(unittest.TestCase):
     Write at least one test for each test for successful operation and for expected errors.
     """
 
-    def test_get_categories_success(self):
+    def test_get_categories(self):
         response = self.client().get('/categories')
         data = json.loads(response.data)
 
         self.assertEqual(response.status_code, 200)
         self.assertEqual(data['success'], True)
+
+    def test_get_paginated_questions(self):
+        response = self.client().get('/questions', query_string=dict(page=1))
+        data = json.loads(response.data)
+
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(data['success'], True)
+        self.assertTrue(data['total_questions'])
+        self.assertTrue(len(data['questions']) > 0)
+
+    def test_get_paginated_questions_second_page(self):
+        response = self.client().get('/questions', query_string=dict(page=2))
+        data = json.loads(response.data)
+
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(data['success'], True)
+        self.assertTrue(data['total_questions'])
+        self.assertTrue(len(data['questions']) > 0)
+        self.assertEqual(len(data['questions']), 9)
+
+    def test_get_paginated_questions_out_of_bounds(self):
+        response = self.client().get('/questions', query_string=dict(page=1000))
+        data = json.loads(response.data)
+
+        self.assertEqual(response.status_code, 404)
+        self.assertEqual(data['success'], False)
 
 
 # Make the tests conveniently executable

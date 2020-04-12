@@ -32,7 +32,7 @@ def create_app(test_config=None):
     CORS(app)
 
     '''
-    @TODO: Use the after_request decorator to set Access-Control-Allow
+    Using the after_request decorator to set Access-Control-Allow
     '''
     @app.after_request
     def after_request(response):
@@ -41,8 +41,7 @@ def create_app(test_config=None):
         return response
 
     '''
-    @TODO:
-    Create an endpoint to handle GET requests
+    Endpoint to handle GET requests
     for all available categories.
     '''
 
@@ -70,8 +69,10 @@ def create_app(test_config=None):
 
     @app.route('/questions', methods=['GET'])
     def get_questions():
-        questions = Question.query.all()
+        questions = Question.query.order_by(Question.id).all()
         formatted_questions = paginate_questions(request, questions)
+        if len(formatted_questions) == 0:
+            abort(404)
         categories = Category.query.all()
         category_list = [category.type for category in categories]
         return jsonify({
@@ -138,5 +139,21 @@ def create_app(test_config=None):
     Create error handlers for all expected errors
     including 404 and 422.
     '''
+
+    @app.errorhandler(404)
+    def not_found(error):
+        return jsonify({
+            'success': False,
+            'error': 404,
+            'message': 'resource not found'
+        }), 404
+
+    @app.errorhandler(422)
+    def unprocessable(error):
+        return jsonify({
+            'success': False,
+            'error': 422,
+            'message': 'unprocessable'
+        }), 422
 
     return app

@@ -48,7 +48,7 @@ def create_app(test_config=None):
     @app.route('/categories', methods=['GET'])
     def get_categories():
         categories = Category.query.all()
-        formatted_categories = [category.format() for category in categories]
+        formatted_categories = [category.type for category in categories]
         return jsonify({
             'success': True,
             'categories': formatted_categories
@@ -101,8 +101,7 @@ def create_app(test_config=None):
         })
 
     '''
-    @TODO:
-    Create an endpoint to POST a new question,
+    Endpoint to POST a new question,
     which will require the question and answer text,
     category, and difficulty score.
 
@@ -110,6 +109,30 @@ def create_app(test_config=None):
     the form will clear and the question will appear at the end of the last page
     of the questions list in the "List" tab.
     '''
+
+    @app.route('/questions', methods=['POST'])
+    def add_question():
+        try:
+            question_text = request.form.get('question')
+            answer = request.form.get('answer')
+            category = request.form.get('category')
+            difficulty = request.form.get('difficulty')
+
+            question = Question(question_text, answer, category, difficulty)
+            for param in [question_text, answer, category, difficulty]:
+                if param is None:
+                    abort(400)
+        except:
+            abort(400)
+
+        try:
+            question.insert()
+        except:
+            abort(500)
+
+        return jsonify({
+            'success': True
+        })
 
     '''
     @TODO:
@@ -149,6 +172,14 @@ def create_app(test_config=None):
     including 404 and 422.
     '''
 
+    @app.errorhandler(400)
+    def bad_request(error):
+        return jsonify({
+            'success': False,
+            'error': 400,
+            'message': 'bad request'
+        })
+
     @app.errorhandler(404)
     def not_found(error):
         return jsonify({
@@ -164,5 +195,13 @@ def create_app(test_config=None):
             'error': 422,
             'message': 'unprocessable'
         }), 422
+
+    @app.errorhandler(500)
+    def server_error(error):
+        return jsonify({
+            'success': False,
+            'error': 500,
+            'message': 'server error'
+        })
 
     return app

@@ -1,4 +1,5 @@
 import os
+import json
 from flask import Flask, request, abort, jsonify
 from flask_sqlalchemy import SQLAlchemy
 from flask_cors import CORS
@@ -171,10 +172,10 @@ def create_app(test_config=None):
     category to be shown.
     '''
 
-    @app.route('/categories/<int:category_id>/questions')
+    @app.route('/categories/<int:category_id>/questions', methods=['GET'])
     def get_questions_by_category(category_id):
         try:
-            questions = Question.query.filter(Category.id == category_id).all()
+            questions = Question.query.filter(Question.category == category_id).all()
             category = Category.query.get(category_id)
             if questions is None or category is None:
                 abort(404)
@@ -201,6 +202,38 @@ def create_app(test_config=None):
     one question at a time is displayed, the user is allowed to answer
     and shown whether they were correct or not.
     '''
+
+    @app.route('/quizzes', methods=['POST'])
+    def get_quiz():
+        quiz_category = request.form.get('quiz_category')
+        previous_question_string = request.form.get('previous_questions')
+
+        if quiz_category is None:
+            abort(400)
+
+        all_category_questions = Question.query.filter(Question.category == quiz_category).all()
+
+        if previous_question_string is not None:
+            try:
+                previous_questions = json.loads(previous_question_string)
+            except:
+                abort(400)
+
+            previous_question_ids = [question['id'] for question in previous_questions]
+
+            remaining_questions = [question for question in all_category_questions if question.id not in previous_question_ids]
+        else:
+            remaining_questions = all_category_questions
+
+        if len(remaining_questions) == 0:
+            abort(404)
+
+        next_question = random.choice(remaining_questions)
+
+        return jsonify({
+            'success': True,
+            'question': next_question.format()
+        })
 
     '''
     Error handlers for all expected errors

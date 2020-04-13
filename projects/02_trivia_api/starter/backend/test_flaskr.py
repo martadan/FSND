@@ -165,6 +165,32 @@ class TriviaTestCase(unittest.TestCase):
         self.assertEqual(response.status_code, 404)
         self.assertEqual(data['success'], False)
 
+    def test_quiz(self):
+        category_id = 4
+        prev_questions = Question.query.filter(Question.category == category_id).all()[0:2]
+        formatted_questions = [question.format() for question in prev_questions]
+        question_string = json.dumps(formatted_questions)
+
+        response = self.client().post(
+            '/quizzes',
+            data={
+                'previous_questions': question_string,
+                'quiz_category': category_id
+            }
+        )
+        data = json.loads(response.data)
+
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(data['success'], True)
+        self.assertTrue(data['question'] is not None)
+
+    def test_quiz_no_parameters(self):
+        response = self.client().post('/quizzes')
+        data = json.loads(response.data)
+
+        self.assertEqual(response.status_code, 400)
+        self.assertEqual(data['success'], False)
+
 
 # Make the tests conveniently executable
 if __name__ == "__main__":

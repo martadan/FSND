@@ -145,6 +145,15 @@ def create_app(test_config=None):
     Try using the word "title" to start.
     '''
 
+    # @app.route('/questions_search', methods=['POST'])
+    # def search_questions():
+    #     try:
+    #         search_term = request.form.get('searchTerm')
+    #         if search_term is None:
+    #             abort(400)
+    #     except:
+    #         abort(400)
+
     '''
     @TODO:
     Create a GET endpoint to get questions based on category.

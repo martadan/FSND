@@ -90,25 +90,25 @@ class TriviaTestCase(unittest.TestCase):
         self.assertEqual(response.status_code, 404)
         self.assertEqual(data['success'], False)
 
-    def test_add_question(self):
-        question = 'Should this test function succeed?'
-        answer = 'Yes'
-        category = 2
-        difficulty = 3
+    # def test_add_question(self):
+    #     question = 'Should this test function succeed?'
+    #     answer = 'Yes'
+    #     category = 2
+    #     difficulty = 3
 
-        response = self.client().post('/questions', data={
-            'question': question,
-            'answer': answer,
-            'category': category,
-            'difficulty': difficulty
-        })
-        data = json.loads(response.data)
+    #     response = self.client().post('/questions', data={
+    #         'question': question,
+    #         'answer': answer,
+    #         'category': category,
+    #         'difficulty': difficulty
+    #     })
+    #     data = json.loads(response.data)
 
-        matching_questions = Question.query.filter(Question.question == question, Question.answer == answer).count()
+    #     matching_questions = Question.query.filter(Question.question == question, Question.answer == answer).count()
 
-        self.assertEqual(response.status_code, 200)
-        self.assertEqual(data['success'], True)
-        self.assertTrue(matching_questions > 0)
+    #     self.assertEqual(response.status_code, 200)
+    #     self.assertEqual(data['success'], True)
+    #     self.assertTrue(matching_questions > 0)
 
     def test_add_question_missing_data(self):
         question = 'Should this second test function succeed?'
@@ -126,6 +126,27 @@ class TriviaTestCase(unittest.TestCase):
         # self.assertEqual(response.status_code, 400)
         self.assertEqual(data['success'], False)
         self.assertEqual(matching_questions, 0)
+
+    def test_question_search(self):
+        search_term = 'taj mahal'
+
+        response = self.client().post(
+            '/questions_search',
+            data={'searchTerm': search_term}
+        )
+        data = json.loads(response.data)
+
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(data['success'], True)
+        self.assertTrue(data['questions'] is not None)
+        self.assertTrue(data['total_questions'] > 0)
+
+    def test_question_search_missing_term(self):
+        response = self.client().post('/questions_search')
+        data = json.loads(response.data)
+
+        self.assertEqual(response.status_code, 400)
+        self.assertEqual(data['success'], False)
 
 
 # Make the tests conveniently executable

@@ -136,8 +136,7 @@ def create_app(test_config=None):
         })
 
     '''
-    @TODO:
-    Create a POST endpoint to get questions based on a search term.
+    POST endpoint to get questions based on a search term.
     It should return any questions for whom the search term
     is a substring of the question.
 
@@ -145,6 +144,9 @@ def create_app(test_config=None):
     only question that include that string within their question.
     Try using the word "title" to start.
     '''
+
+    # TODO ask whether this is the right naming convention
+    #      not sure whether it should just be /questions
 
     @app.route('/questions_search', methods=['POST'])
     def search_questions():

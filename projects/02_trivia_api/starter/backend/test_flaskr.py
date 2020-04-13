@@ -19,6 +19,7 @@ class TriviaTestCase(unittest.TestCase):
         password = 'P3jzt4B4'
         address = 'localhost:5432'
         self.database_name = "trivia_test"
+        # TODO swap back
         # self.database_path = "postgres://{}/{}".format('localhost:5432', self.database_name)
         self.database_path = f"postgres://{username}:{password}@{address}/{self.database_name}"
         setup_db(self.app, self.database_path)
@@ -71,6 +72,7 @@ class TriviaTestCase(unittest.TestCase):
         self.assertEqual(response.status_code, 404)
         self.assertEqual(data['success'], False)
 
+    # TODO uncomment
     # def test_delete_question(self):
     #     question_id = 2
     #     response = self.client().delete(f'/questions/{question_id}')
@@ -89,6 +91,7 @@ class TriviaTestCase(unittest.TestCase):
         self.assertEqual(response.status_code, 404)
         self.assertEqual(data['success'], False)
 
+    # TODO uncomment
     # def test_add_question(self):
     #     question = 'Should this test function succeed?'
     #     answer = 'Yes'

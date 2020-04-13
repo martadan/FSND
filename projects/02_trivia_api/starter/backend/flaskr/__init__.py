@@ -72,6 +72,11 @@ def create_app(test_config=None):
         formatted_questions = paginate_questions(request, questions)
         if len(formatted_questions) == 0:
             abort(404)
+
+        # fix off-by-one error
+        for question in formatted_questions:
+            question['category'] -= 1
+
         categories = Category.query.order_by(Category.id).all()
         category_list = [category.type for category in categories]
         return jsonify({

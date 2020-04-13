@@ -112,16 +112,17 @@ def create_app(test_config=None):
 
     @app.route('/questions', methods=['POST'])
     def add_question():
-        try:
-            question_text = request.form.get('question')
-            answer = request.form.get('answer')
-            category = request.form.get('category')
-            difficulty = request.form.get('difficulty')
+        question_text = request.form.get('question')
+        answer = request.form.get('answer')
+        category = request.form.get('category')
+        difficulty = request.form.get('difficulty')
+        for param in [question_text, answer, category, difficulty]:
+            if param is None:
+                abort(400)
 
+        try:
             question = Question(question_text, answer, category, difficulty)
-            for param in [question_text, answer, category, difficulty]:
-                if param is None:
-                    abort(400)
+
         except:
             abort(400)
 
@@ -145,14 +146,22 @@ def create_app(test_config=None):
     Try using the word "title" to start.
     '''
 
-    # @app.route('/questions_search', methods=['POST'])
-    # def search_questions():
-    #     try:
-    #         search_term = request.form.get('searchTerm')
-    #         if search_term is None:
-    #             abort(400)
-    #     except:
-    #         abort(400)
+    @app.route('/questions_search', methods=['POST'])
+    def search_questions():
+        search_term = request.form.get('searchTerm')
+        if search_term is None:
+            print(f'Search term {search_term} should abort')
+            abort(400)
+
+        questions = Question.query.filter(Question.question.ilike(f'%{search_term}%')).all()
+        formatted_questions = [question.format() for question in questions]
+
+        return jsonify({
+            'success': True,
+            'questions': formatted_questions,
+            'total_questions': len(questions),
+            'current_category': ''
+        })
 
     '''
     @TODO:
@@ -187,7 +196,7 @@ def create_app(test_config=None):
             'success': False,
             'error': 400,
             'message': 'bad request'
-        })
+        }), 400
 
     @app.errorhandler(404)
     def not_found(error):
@@ -211,6 +220,6 @@ def create_app(test_config=None):
             'success': False,
             'error': 500,
             'message': 'server error'
-        })
+        }), 500
 
     return app

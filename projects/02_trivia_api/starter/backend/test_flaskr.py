@@ -122,8 +122,7 @@ class TriviaTestCase(unittest.TestCase):
 
         matching_questions = Question.query.filter(Question.question == question, Question.answer == answer).count()
 
-        # TODO figure out why this ONE line isn't working like everything else
-        # self.assertEqual(response.status_code, 400)
+        self.assertEqual(response.status_code, 400)
         self.assertEqual(data['success'], False)
         self.assertEqual(matching_questions, 0)
 

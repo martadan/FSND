@@ -47,7 +47,7 @@ def create_app(test_config=None):
 
     @app.route('/categories', methods=['GET'])
     def get_categories():
-        categories = Category.query.all()
+        categories = Category.query.order_by(Category.id).all()
         formatted_categories = [category.type for category in categories]
         return jsonify({
             'success': True,
@@ -72,7 +72,7 @@ def create_app(test_config=None):
         formatted_questions = paginate_questions(request, questions)
         if len(formatted_questions) == 0:
             abort(404)
-        categories = Category.query.all()
+        categories = Category.query.order_by(Category.id).all()
         category_list = [category.type for category in categories]
         return jsonify({
             'success': True,
@@ -174,6 +174,8 @@ def create_app(test_config=None):
 
     @app.route('/categories/<int:category_id>/questions', methods=['GET'])
     def get_questions_by_category(category_id):
+        # fix off-by-one error
+        category_id += 1
         try:
             questions = Question.query.filter(Question.category == category_id).all()
             category = Category.query.get(category_id)

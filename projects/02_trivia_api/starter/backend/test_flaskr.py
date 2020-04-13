@@ -128,6 +128,7 @@ class TriviaTestCase(unittest.TestCase):
         self.assertEqual(data['success'], False)
         self.assertEqual(matching_questions, 0)
 
+    # TODO figure out why this works in test but not in app
     def test_question_search(self):
         search_term = 'taj mahal'
 

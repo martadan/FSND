@@ -15,9 +15,9 @@ class TriviaTestCase(unittest.TestCase):
         self.app = create_app()
         self.client = self.app.test_client
 
-        username = 'danil'
-        password = os.environ['psql_pass']
-        address = 'localhost:5432'
+        # username = 'danil'
+        # password = os.environ['psql_pass']
+        # address = 'localhost:5432'
         self.database_name = "trivia_test"
         self.database_path = "postgres://{}/{}".format('localhost:5432', self.database_name)
         # self.database_path = f"postgres://{username}:{password}@{address}/{self.database_name}"

@@ -3,9 +3,9 @@ from sqlalchemy import Column, String, Integer, create_engine
 from flask_sqlalchemy import SQLAlchemy
 import json
 
-username = 'danil'
-password = os.environ['psql_pass']
-address = 'localhost:5432'
+# username = 'danil'
+# password = os.environ['psql_pass']
+# address = 'localhost:5432'
 database_name = "trivia"
 database_path = "postgres://{}/{}".format('localhost:5432', database_name)
 # database_path = f"postgres://{username}:{password}@{address}/{database_name}"

@@ -134,7 +134,8 @@ class TriviaTestCase(unittest.TestCase):
 
         response = self.client().post(
             '/questions_search',
-            data={'searchTerm': search_term}
+            data=json.dumps({'searchTerm': search_term}),
+            content_type='application/json'
         )
         data = json.loads(response.data)
 
@@ -159,7 +160,6 @@ class TriviaTestCase(unittest.TestCase):
         self.assertEqual(data['success'], True)
         self.assertTrue(data['questions'] is not None)
         self.assertTrue(data['total_questions'] > 0)
-        self.assertEqual(data['current_category'], 'Art')
 
     def test_get_by_category_out_of_bounds(self):
         category_id = 100
@@ -170,17 +170,20 @@ class TriviaTestCase(unittest.TestCase):
         self.assertEqual(data['success'], False)
 
     def test_quiz(self):
+        # TODO figure out what the format of the input is supposed to be
         category_id = 4
+        full_category = Category.query.get(category_id).format()
         prev_questions = Question.query.filter(Question.category == category_id).all()[0:2]
         formatted_questions = [question.format() for question in prev_questions]
-        question_string = json.dumps(formatted_questions)
+        # question_string = json.dumps(formatted_questions)
 
         response = self.client().post(
             '/quizzes',
-            data={
-                'previous_questions': question_string,
-                'quiz_category': category_id
-            }
+            data=json.dumps({
+                'previous_questions': formatted_questions,
+                'quiz_category': full_category
+            }),
+            content_type='application/json'
         )
         data = json.loads(response.data)
 

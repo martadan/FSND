@@ -49,6 +49,7 @@ def create_app(test_config=None):
     def get_categories():
         categories = Category.query.order_by(Category.id).all()
         formatted_categories = [category.type for category in categories]
+        # category_dict = {category.id: category.type for category in categories}
         return jsonify({
             'success': True,
             'categories': formatted_categories
@@ -155,7 +156,11 @@ def create_app(test_config=None):
 
     @app.route('/questions_search', methods=['POST'])
     def search_questions():
-        search_term = request.form.get('searchTerm')
+        try:
+            search_term = request.get_json()['searchTerm']
+        except:
+            abort(400)
+
         if search_term is None:
             abort(400)
 
@@ -199,8 +204,7 @@ def create_app(test_config=None):
         })
 
     '''
-    @TODO:
-    Create a POST endpoint to get questions to play the quiz.
+    POST endpoint to get questions to play the quiz.
     This endpoint should take category and previous question parameters
     and return a random questions within the given category,
     if provided, and that is not one of the previous questions.
@@ -212,23 +216,31 @@ def create_app(test_config=None):
 
     @app.route('/quizzes', methods=['POST'])
     def get_quiz():
-        quiz_category = request.form.get('quiz_category')
-        previous_question_string = request.form.get('previous_questions')
+        try:
+            all_data = request.get_json()
+            quiz_category = all_data['quiz_category']
+            previous_questions = all_data['previous_questions']
+
+            category_id = int(quiz_category['id'])
+
+            # fix off-by-one error
+            category_id += 1
+        except:
+            abort(400)
 
         if quiz_category is None:
             abort(400)
 
-        all_category_questions = Question.query.filter(Question.category == quiz_category).all()
+        all_category_questions = Question.query.filter(Question.category == category_id).all()
 
-        if previous_question_string is not None:
-            try:
-                previous_questions = json.loads(previous_question_string)
-            except:
-                abort(400)
+        if len(previous_questions) == len(all_category_questions):
+            return jsonify({
+                'success': True,
+                'question': None
+            })
 
-            previous_question_ids = [question['id'] for question in previous_questions]
-
-            remaining_questions = [question for question in all_category_questions if question.id not in previous_question_ids]
+        if len(previous_questions) > 0:
+            remaining_questions = [question for question in all_category_questions if question.id not in previous_questions]
         else:
             remaining_questions = all_category_questions
 

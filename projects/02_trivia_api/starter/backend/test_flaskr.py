@@ -128,7 +128,6 @@ class TriviaTestCase(unittest.TestCase):
         self.assertEqual(data['success'], False)
         self.assertEqual(matching_questions, 0)
 
-    # TODO figure out why this works in test but not in app
     def test_question_search(self):
         search_term = 'taj mahal'
 
@@ -170,12 +169,10 @@ class TriviaTestCase(unittest.TestCase):
         self.assertEqual(data['success'], False)
 
     def test_quiz(self):
-        # TODO figure out what the format of the input is supposed to be
         category_id = 4
         full_category = Category.query.get(category_id).format()
         prev_questions = Question.query.filter(Question.category == category_id).all()[0:2]
         formatted_questions = [question.format() for question in prev_questions]
-        # question_string = json.dumps(formatted_questions)
 
         response = self.client().post(
             '/quizzes',

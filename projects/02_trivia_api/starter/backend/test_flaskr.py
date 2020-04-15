@@ -19,9 +19,9 @@ class TriviaTestCase(unittest.TestCase):
         password = 'P3jzt4B4'
         address = 'localhost:5432'
         self.database_name = "trivia_test"
-        # TODO swap back
-        # self.database_path = "postgres://{}/{}".format('localhost:5432', self.database_name)
-        self.database_path = f"postgres://{username}:{password}@{address}/{self.database_name}"
+        self.database_path = "postgres://{}/{}".format('localhost:5432', self.database_name)
+        # self.database_path = f"postgres://{username}:{password}@{address}/{self.database_name}"
+        # TODO swap back to run locally
         setup_db(self.app, self.database_path)
 
         # binds the app to the current context

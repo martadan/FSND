@@ -7,9 +7,9 @@ username = 'danil'
 password = 'P3jzt4B4'
 address = 'localhost:5432'
 database_name = "trivia"
-database_path = f"postgres://{username}:{password}@{address}/{database_name}"
-# TODO swap back
-# database_path = "postgres://{}/{}".format('localhost:5432', database_name)
+database_path = "postgres://{}/{}".format('localhost:5432', database_name)
+# database_path = f"postgres://{username}:{password}@{address}/{database_name}"
+# TODO swap back to run locally
 
 db = SQLAlchemy()
 

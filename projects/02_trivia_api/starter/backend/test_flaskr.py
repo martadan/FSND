@@ -93,8 +93,8 @@ class TriviaTestCase(unittest.TestCase):
     def test_add_question(self):
         question = 'Should this test function succeed?'
         answer = 'Yes'
-        category = 2
-        difficulty = 3
+        category = '2'
+        difficulty = '3'
 
         response = self.client().post(
             '/questions',

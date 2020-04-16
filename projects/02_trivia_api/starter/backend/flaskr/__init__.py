@@ -118,10 +118,11 @@ def create_app(test_config=None):
 
     @app.route('/questions', methods=['POST'])
     def add_question():
-        question_text = request.form.get('question')
-        answer = request.form.get('answer')
-        category = request.form.get('category')
-        difficulty = request.form.get('difficulty')
+        all_data = request.get_json()
+        question_text = all_data['question']
+        answer = all_data['answer']
+        category = all_data['category']
+        difficulty = all_data['difficulty']
         for param in [question_text, answer, category, difficulty]:
             if param is None:
                 abort(400)

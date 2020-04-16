@@ -96,12 +96,16 @@ class TriviaTestCase(unittest.TestCase):
         category = 2
         difficulty = 3
 
-        response = self.client().post('/questions', data={
-            'question': question,
-            'answer': answer,
-            'category': category,
-            'difficulty': difficulty
-        })
+        response = self.client().post(
+            '/questions',
+            data=json.dumps({
+                'question': question,
+                'answer': answer,
+                'category': category,
+                'difficulty': difficulty
+            }),
+            content_type='application/json'
+        )
         data = json.loads(response.data)
 
         matching_questions = Question.query.filter(Question.question == question, Question.answer == answer).count()
@@ -114,10 +118,14 @@ class TriviaTestCase(unittest.TestCase):
         question = 'Should this second test function succeed?'
         answer = 'No'
 
-        response = self.client().post('/questions', data={
-            'question': question,
-            'answer': answer
-        })
+        response = self.client().post(
+            '/questions',
+            data=json.dumps({
+                'question': question,
+                'answer': answer
+            }),
+            content_type='application/json'
+        )
         data = json.loads(response.data)
 
         matching_questions = Question.query.filter(Question.question == question, Question.answer == answer).count()

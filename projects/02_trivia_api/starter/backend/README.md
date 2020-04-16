@@ -117,10 +117,10 @@ GET '/categories/<int:category_id>/questions'
 POST '/questions'
 - Adds a new questions to the database
 - returns {'success': True} if successful
-- expects a form with 'question', 'answer', 'category', and 'difficulty'
+- expects json data with 'question', 'answer', 'category', and 'difficulty'
 
 POST '/questions_search'
-- Expects a form with 'searchTerm'
+- Expects json data with 'searchTerm'
 - Returns all questions that contain searchTerm (case insensitive)
 {
     'success': True,

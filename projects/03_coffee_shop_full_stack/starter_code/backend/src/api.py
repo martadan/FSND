@@ -28,6 +28,14 @@ CORS(app)
         where drinks is the list of drinks
         or appropriate status code indicating reason for failure
 '''
+@app.route('/drinks', methods=['GET'])
+# @requires_auth('get:drinks')
+def get_drinks():
+    return jsonify([{
+        'id': 0,
+        'title': 'test drink',
+        'recipe': [{'color': 'red', 'parts': 1}]
+    }])
 
 
 '''

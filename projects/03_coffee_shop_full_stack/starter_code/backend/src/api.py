@@ -227,9 +227,3 @@ def server_error(error):
         'error': 500,
         'message': 'server error'
     }), 500
-
-
-'''
-@TODO implement error handler for AuthError
-    error handler should conform to general task above
-'''

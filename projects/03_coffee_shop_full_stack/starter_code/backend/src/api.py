@@ -16,7 +16,7 @@ CORS(app)
 !! NOTE THIS WILL DROP ALL RECORDS AND START YOUR DB FROM SCRATCH
 !! NOTE THIS MUST BE UNCOMMENTED ON FIRST RUN
 '''
-# db_drop_and_create_all()
+db_drop_and_create_all()
 
 # ROUTES
 '''
@@ -31,11 +31,13 @@ CORS(app)
 @app.route('/drinks', methods=['GET'])
 # @requires_auth('get:drinks')
 def get_drinks():
-    return jsonify([{
-        'id': 0,
-        'title': 'test drink',
-        'recipe': [{'color': 'red', 'parts': 1}]
-    }])
+    drinks = Drink.query.all()
+    formatted_drinks = [drink.short() for drink in drinks]
+
+    return jsonify({
+        "success": True,
+        "drinks": formatted_drinks
+    })  # TODO, 200
 
 
 '''
@@ -59,6 +61,33 @@ def get_drinks():
         where drink an array containing only the newly created drink
         or appropriate status code indicating reason for failure
 '''
+@app.route('/drinks', methods=['POST'])
+# @requires_auth('post:drinks')
+def create_drink():
+    try:
+        all_data = request.get_json()
+        title = all_data['title']
+        recipe = all_data['recipe']
+    except:
+        abort(400)
+
+    if title is None or recipe is None:
+        abort(400)
+
+    try:
+        drink = Drink(title=title, recipe=json.dumps([recipe]))
+    except:
+        abort(400)
+
+    try:
+        drink.insert()
+    except:
+        abort(500)
+
+    return jsonify({
+        'success': True,
+        'drinks': drink.long()
+    })  # TODO, 200
 
 
 '''
@@ -92,31 +121,40 @@ def get_drinks():
 '''
 Example error handling for unprocessable entity
 '''
+@app.errorhandler(400)
+def bad_request(error):
+    return jsonify({
+        "success": False,
+        "error": 400,
+        "message": "bad request"
+    }), 400
+
+
+@app.errorhandler(404)
+def resource_not_found(error):
+    return jsonify({
+        "success": False,
+        "error": 404,
+        "message": "resource not found"
+    }), 404
+
+
 @app.errorhandler(422)
 def unprocessable(error):
     return jsonify({
-                    "success": False,
-                    "error": 422,
-                    "message": "unprocessable"
-                    }), 422
+        "success": False,
+        "error": 422,
+        "message": "unprocessable"
+    }), 422
 
 
-'''
-@TODO implement error handlers using the @app.errorhandler(error) decorator
-    each error handler should return (with approprate messages):
-             jsonify({
-                    "success": False,
-                    "error": 404,
-                    "message": "resource not found"
-                    }), 404
-
-'''
-
-
-'''
-@TODO implement error handler for 404
-    error handler should conform to general task above
-'''
+@app.errorhandler(500)
+def server_error(error):
+    return jsonify({
+        'success': False,
+        'error': 500,
+        'message': 'server error'
+    }), 500
 
 
 '''

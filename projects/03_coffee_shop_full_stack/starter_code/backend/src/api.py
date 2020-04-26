@@ -20,7 +20,7 @@ db_drop_and_create_all()
 
 # ROUTES
 '''
-@TODO implement endpoint
+implemented endpoint
     GET /drinks
         it should be a public endpoint
         it should contain only the drink.short() data representation
@@ -29,7 +29,7 @@ db_drop_and_create_all()
         or appropriate status code indicating reason for failure
 '''
 @app.route('/drinks', methods=['GET'])
-# @requires_auth('get:drinks')
+# @requires_auth('get:drinks') - not required for this endpoint
 def get_drinks():
     drinks = Drink.query.all()
     formatted_drinks = [drink.short() for drink in drinks]
@@ -52,7 +52,7 @@ def get_drinks():
 
 
 '''
-@TODO implement endpoint
+implemented endpoint
     POST /drinks
         it should create a new row in the drinks table
         it should require the 'post:drinks' permission

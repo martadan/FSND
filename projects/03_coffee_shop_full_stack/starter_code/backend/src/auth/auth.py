@@ -24,13 +24,15 @@ class AuthError(Exception):
 
 # Auth Header
 '''
-@TODO implement get_token_auth_header() method
+implemented get_token_auth_header() method
     it should attempt to get the header from the request
         it should raise an AuthError if no header is present
     it should attempt to split bearer and the token
         it should raise an AuthError if the header is malformed
     return the token part of the header
 '''
+
+
 def get_token_auth_header():
     """
     Splits out bearer token from autorization header
@@ -69,7 +71,7 @@ def get_token_auth_header():
 
 
 '''
-@TODO implement check_permissions(permission, payload) method
+implemented check_permissions(permission, payload) method
     @INPUTS
         permission: string permission (i.e. 'post:drink')
         payload: decoded jwt payload
@@ -80,6 +82,8 @@ def get_token_auth_header():
         string is not in the payload permissions array
     return true otherwise
 '''
+
+
 def check_permissions(permission, payload):
     """
     Checks if string permission is in payload jwt
@@ -101,7 +105,7 @@ def check_permissions(permission, payload):
 
 
 '''
-@TODO implement verify_decode_jwt(token) method
+implemented verify_decode_jwt(token) method
     @INPUTS
         token: a json web token (string)
 
@@ -114,6 +118,8 @@ def check_permissions(permission, payload):
     !!NOTE urlopen has a common certificate error described here:
     https://stackoverflow.com/questions/50236117/scraping-ssl-certificate-verify-failed-error-for-http-en-wikipedia-org
 '''
+
+
 def verify_decode_jwt(token):
     """
     Returns payload from jwt (and verifies jwt is correct)
@@ -176,7 +182,7 @@ def verify_decode_jwt(token):
 
 
 '''
-@TODO implement @requires_auth(permission) decorator method
+implemented @requires_auth(permission) decorator method
     @INPUTS
         permission: string permission (i.e. 'post:drink')
 
@@ -185,6 +191,8 @@ def verify_decode_jwt(token):
     it should use the check_permissions method validate claims and check the requested permission
     return the decorator which passes the decoded payload to the decorated method
 '''
+
+
 def requires_auth(permission=''):
     """
     Already implemented??

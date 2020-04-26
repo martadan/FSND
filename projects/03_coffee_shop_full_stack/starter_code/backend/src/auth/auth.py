@@ -185,9 +185,11 @@ def verify_decode_jwt(token):
     it should use the check_permissions method validate claims and check the requested permission
     return the decorator which passes the decoded payload to the decorated method
 '''
-
-
 def requires_auth(permission=''):
+    """
+    Already implemented??
+    Wrapper function for authenticating request (check token, check for permissions)
+    """
     def requires_auth_decorator(f):
         @wraps(f)
         def wrapper(*args, **kwargs):

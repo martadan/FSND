@@ -37,7 +37,7 @@ def get_drinks():
     return jsonify({
         "success": True,
         "drinks": formatted_drinks
-    })  # TODO, 200
+    }), 200
 
 
 '''
@@ -87,7 +87,7 @@ def create_drink():
     return jsonify({
         'success': True,
         'drinks': drink.long()
-    })  # TODO, 200
+    }), 200
 
 
 '''
@@ -128,6 +128,15 @@ def bad_request(error):
         "error": 400,
         "message": "bad request"
     }), 400
+
+
+@app.errorhandler(401)
+def unauthorized(error):
+    return jsonify({
+        "success": False,
+        "error": 401,
+        "message": "unauthorized"
+    }), 401
 
 
 @app.errorhandler(404)

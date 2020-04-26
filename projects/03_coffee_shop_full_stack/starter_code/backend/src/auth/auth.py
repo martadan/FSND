@@ -31,10 +31,41 @@ class AuthError(Exception):
         it should raise an AuthError if the header is malformed
     return the token part of the header
 '''
-
-
 def get_token_auth_header():
-    raise Exception('Not Implemented')
+    """
+    Splits out bearer token from autorization header
+    (Copied and modified from BasicFlaskAuth)
+    """
+    authorization = request.headers.get('Authorization', None)
+
+    if authorization is None:
+        raise AuthError({
+            'code': 'authorization_header_missing',
+            'description': 'Authorization header is expected.'
+        }, 401)
+
+    auth_parts = authorization.split()
+
+    if auth_parts[0].lower() != 'bearer':
+        raise AuthError({
+            'code': 'invalid_header',
+            'description': 'Authorization header must start with "Bearer".'
+        }, 401)
+
+    elif len(auth_parts) < 2:
+        raise AuthError({
+            'code': 'invalid_header',
+            'description': 'Token not found.'
+        }, 401)
+
+    elif len(auth_parts) > 2:
+        raise AuthError({
+            'code': 'invalid_header',
+            'description': 'Authorization header must be bearer token.'
+        }, 401)
+
+    token = auth_parts[1]
+    return token
 
 
 '''

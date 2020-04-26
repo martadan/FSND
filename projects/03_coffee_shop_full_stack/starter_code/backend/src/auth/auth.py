@@ -188,6 +188,7 @@ def verify_decode_jwt(token):
 def requires_auth(permission=''):
     """
     Already implemented??
+    Removed payload from f() return - current functions don't take a payload
     Wrapper function for authenticating request (check token, check for permissions)
     """
     def requires_auth_decorator(f):
@@ -196,7 +197,7 @@ def requires_auth(permission=''):
             token = get_token_auth_header()
             payload = verify_decode_jwt(token)
             check_permissions(permission, payload)
-            return f(payload, *args, **kwargs)
+            return f(*args, **kwargs)
 
         return wrapper
     return requires_auth_decorator

@@ -56,7 +56,6 @@ The `--reload` flag will detect file changes and restart the server automaticall
 2. Select a unique tenant domain
 3. Create a new, single page web application
 4. Create a new API
-https://dev-l4529u72.auth0.com/authorize?audience=coffee&response_type=token&client_id=dRZH6O0PRKaO2Lhwm05EmROtKSWm6Ozp&redirect_uri=http://localhost:8080/login-results
     - in API Settings:
         - Enable RBAC
         - Enable Add Permissions in the Access Token
@@ -68,12 +67,8 @@ https://dev-l4529u72.auth0.com/authorize?audience=coffee&response_type=token&cli
 6. Create new roles for:
     - Barista
         - can `get:drinks-detail`
-        - barista@test.com, BARISTAtest20
-        - eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCIsImtpZCI6IkFKOW9HX3R5eHlHcG1Ub1ZVNlRSTiJ9.eyJpc3MiOiJodHRwczovL2Rldi1sNDUyOXU3Mi5hdXRoMC5jb20vIiwic3ViIjoiYXV0aDB8NWVhNDU4NzI1NGIxNGMwYzEyNTZhOTcwIiwiYXVkIjoiY29mZmVlIiwiaWF0IjoxNTg4MjA5ODk4LCJleHAiOjE1ODgyMTcwOTgsImF6cCI6ImRSWkg2TzBQUkthTzJMaHdtMDVFbVJPdEtTV202T3pwIiwic2NvcGUiOiIiLCJwZXJtaXNzaW9ucyI6WyJnZXQ6ZHJpbmtzLWRldGFpbCJdfQ.VaGz-9JrpHGy4V_bPJWZve9sWM26y6v3zq2g70V1BgTzOUfCU41RkTClMNEsqqabogcEypec4LcTI-LtQlm7SptVZcsoAFBDGhI17RxW-jgexts10Gp4Kk6X-GqxTNH__NPEwDhtJEhSjXhHAfeSt8MWhCr2_DA83TRZRwqWWFDG8GzSk4-lyl6tX453PSdiucNszpkzVQ7elTK9POKZUBAtBYWp1ZRyTQlUaNZJZ0ph9AP0NdZh8lGZDwAlk9iKlue4-dZHsI5H-48pQCRLhTYj5feDCstscM9xYa0MiqSIWbARn5wdRhr4iKFFQnnd2FFI_p97RwXd-oNiAebPtw
     - Manager
         - can perform all actions
-        - manager@test.com, MANAGERtest20
-        - eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCIsImtpZCI6IkFKOW9HX3R5eHlHcG1Ub1ZVNlRSTiJ9.eyJpc3MiOiJodHRwczovL2Rldi1sNDUyOXU3Mi5hdXRoMC5jb20vIiwic3ViIjoiYXV0aDB8NWVhNDU5NGE1NGIxNGMwYzEyNTZhYjY2IiwiYXVkIjoiY29mZmVlIiwiaWF0IjoxNTg4MjA5ODQ5LCJleHAiOjE1ODgyMTcwNDksImF6cCI6ImRSWkg2TzBQUkthTzJMaHdtMDVFbVJPdEtTV202T3pwIiwic2NvcGUiOiIiLCJwZXJtaXNzaW9ucyI6WyJkZWxldGU6ZHJpbmtzIiwiZ2V0OmRyaW5rcy1kZXRhaWwiLCJwYXRjaDpkcmlua3MiLCJwb3N0OmRyaW5rcyJdfQ.iyOU-4IyHVPRIkv1nny5bVJ7OFGkX7BxPpcyttymyRDegJVzckItwjWV0Og3YGMhibzOcd5sHxbaraqx8VUjpct429wgXn3n3y2XTy1RuI76QQNlMjzmkoYYC-W2Kg-ygNSK41-my0fxberUu2k8KkC44ZnsWfD4iohIWeqBTnD7iPQlMzNXHRtT55dosvs62TUJ8S0R5GONpTexh-RPhn2buzYXEwM90h8b6_z7zgxVeom3Un-XLW71GqPhp8qW3PzkbbkeY7Wg-kn4hac-v4SIPnwTZbplpu0aEo8idc2ZLwsE1y20Nb3u6qu8ZBkLPi-z8xxHUFpb0YesjoMg3Q
 7. Test your endpoints with [Postman](https://getpostman.com).
     - Register 2 users - assign the Barista role to one and Manager role to the other.
     - Sign into each account and make note of the JWT.

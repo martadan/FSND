@@ -9,7 +9,7 @@ from .auth.auth import AuthError, requires_auth
 
 app = Flask(__name__)
 setup_db(app)
-CORS(app)
+cors = CORS(app, resources={r'*': {'origins': 'http://localhost:8100'}})
 
 '''
 uncommented the following line to initialize the database

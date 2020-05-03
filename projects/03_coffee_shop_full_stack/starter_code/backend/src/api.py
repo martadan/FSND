@@ -34,6 +34,10 @@ def get_drinks():
             or appropriate status code indicating reason for failure
     '''
     drinks = Drink.query.all()
+
+    if len(drinks) == 0:
+        abort(404)
+
     formatted_drinks = [drink.short() for drink in drinks]
 
     return jsonify({
@@ -55,6 +59,10 @@ def get_drinks_detail():
             or appropriate status code indicating reason for failure
     '''
     drinks = Drink.query.all()
+
+    if len(drinks) == 0:
+        abort(404)
+    
     formatted_drinks = [drink.long() for drink in drinks]
 
     return jsonify({

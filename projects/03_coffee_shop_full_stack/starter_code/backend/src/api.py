@@ -95,7 +95,7 @@ def create_drink():
         abort(400)
 
     try:
-        drink = Drink(title=title, recipe=json.dumps(recipe))
+        drink = Drink(title=title, recipe=json.dumps([recipe]))
     except:
         abort(400)
 
@@ -236,3 +236,12 @@ def server_error(error):
         'error': 500,
         'message': 'server error'
     }), 500
+
+
+@app.errorhandler(AuthError)
+def auth_error(error):
+    return jsonify({
+        'success': False,
+        'error': error.status_code,
+        'message': error.error
+    }), error.status_code

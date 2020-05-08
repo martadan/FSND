@@ -62,7 +62,7 @@ def get_drinks_detail():
 
     if len(drinks) == 0:
         abort(404)
-    
+
     formatted_drinks = [drink.long() for drink in drinks]
 
     return jsonify({

@@ -12,7 +12,7 @@ setup_db(app)
 cors = CORS(app, resources={r'*': {'origins': 'http://localhost:8100'}})
 
 '''
-uncommented the following line to initialize the database
+uncomment the following line to initialize the database
 !! NOTE THIS WILL DROP ALL RECORDS AND START YOUR DB FROM SCRATCH
 !! NOTE THIS MUST BE UNCOMMENTED ON FIRST RUN
 '''
@@ -95,7 +95,7 @@ def create_drink():
         abort(400)
 
     try:
-        drink = Drink(title=title, recipe=json.dumps([recipe]))
+        drink = Drink(title=title, recipe=json.dumps(recipe))
     except:
         abort(400)
 

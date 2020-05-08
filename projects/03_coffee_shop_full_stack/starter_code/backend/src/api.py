@@ -141,7 +141,7 @@ def update_drink(id):
 
     if 'recipe' in all_data.keys():
         recipe = all_data['recipe']
-        drink.recipe = recipe
+        drink.recipe = [recipe]
 
     try:
         drink.update()
